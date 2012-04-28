@@ -1,6 +1,6 @@
 OneSpaceWidth = 1
 Infinity = 1/0.0
-Width = 13
+Width = 50
 
 class WordWrapper
   def initialize(width = Width, input = ARGV[0])

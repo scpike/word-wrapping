@@ -46,20 +46,20 @@ equal
   def test_minimum_raggedness_output
     assert_equal """Four score
 and seven
-years ago our
-fathers
+years ago
+our fathers
 brought forth
 upon this
 continent a
 new nation,
 conceived in
 liberty and
-dedicated to
-the
+dedicated
+to the
 proposition
-that all men
-are created
-equal
+that all
+men are
+created equal
 """, MinimumRaggedness.new(13,@med_text).output
   end
 
