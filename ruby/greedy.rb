@@ -11,16 +11,23 @@ class Greedy < WordWrapper
       end
       ans << line << "\n"
     end
-    ans
+    @output = ans
   end
 
   def cost
-    total_cost output
+    compute_wrapping unless @cost
+    @cost
+  end
+
+  def compute_wrapping
+    @output = output
+    @cost = total_cost(@output)
   end
 end
 
 if $0 == __FILE__ # run from cl
   g = Greedy.new
+  g.compute_wrapping
   puts g.output
   puts "Greedy costs #{g.cost}"
 end

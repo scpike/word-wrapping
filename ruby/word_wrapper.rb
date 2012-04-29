@@ -1,21 +1,24 @@
 OneSpaceWidth = 1
 Infinity = 1/0.0
-Width = 50
+Width = 100
 
 class WordWrapper
-  def initialize(width = Width, input = ARGV[0])
+  attr_accessor :width, :words, :output, :cost
+  def initialize(width = Width, text = nil)
     @width = width
-    if input
+    if text
+      @input = text
+    elsif ARGV[0]
       begin
-        @input =  File.read(input)
+        @input =  File.read(ARGV[0])
       rescue Errno::ENOENT => e
-        @input = input
+        @input = ARGV[0]
       end
-      @words = @input.split
     else
       raise "You need to supply an input string or file"
     end
   end
+
   # Calculate the cost of a line. Cost is defined as
   #  [ Trailing whitespace ] ^ 2
   #
@@ -25,5 +28,9 @@ class WordWrapper
 
   def total_cost(paragraph)
     paragraph.split("\n").inject(0){ |acc, line| acc + line_cost(line) }
+  end
+
+  def illegal_words
+    @words.select{ |word| word.length > @width }
   end
 end
