@@ -34,3 +34,6 @@ class WordWrapper
     @words.select{ |word| word.length > @width }
   end
 end
+
+require  "minimum_raggedness"
+require  "greedy"

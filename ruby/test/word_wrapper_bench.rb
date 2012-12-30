@@ -1,22 +1,22 @@
 require 'benchmark'
 include Benchmark
 
-require_relative '../greedy'
-require_relative '../minimum_raggedness'
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+require 'word_wrapper'
 
 @oliver_twist = File.read(File.join(File.dirname(__FILE__), "../../oliver-twist.txt"))
 @before_the_law = File.read(File.join(File.dirname(__FILE__), "../../before-the-law.txt"))
 @gettysburg =  File.read(File.join(File.dirname(__FILE__), "../../getty-long.txt"))
 
 def run_greedy(text, times=10000)
-  g = Greedy.new(100, text)
+  g = WordWrapper::Greedy.new(100, text)
   times.times do
     g.compute_wrapping
   end
 end
 
 def run_mr(text, times=100)
-  g = MinimumRaggedness.new(100, text)
+  g = WordWrapper::MinimumRaggedness.new(100, text)
   times.times do
     g.compute_wrapping
   end
