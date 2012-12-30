@@ -72,6 +72,9 @@ To this
 gatekeeper
 comes
 a man
-""", WordWrapper::MinimumRaggedness.new(10, "Before the law sits a gatekeeper. To this gatekeeper comes a man").wrap
+""", WordWrapper::MinimumRaggedness
+      .new(10,
+           "Before the law sits a gatekeeper. To this gatekeeper comes a man")
+      .wrap
   end
 end

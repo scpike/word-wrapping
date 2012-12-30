@@ -6,7 +6,10 @@ class WordWrapper
       @c ||= {}
       @c[[i,j]] ||=
         begin
-          if j-i == 0 and words[j-1].length >= @width
+          # Special case for single words that are longer than @width.
+          # Mark their cost as 0 so they get their own line without
+          # messing up the algorithm
+          if j == i and words[j-1].length >= @width
             cost = 0
           else
             cost = @width -
