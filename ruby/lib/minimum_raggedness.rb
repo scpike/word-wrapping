@@ -2,6 +2,11 @@ class WordWrapper
   class MinimumRaggedness < WordWrapper
     attr_accessor :splits
 
+    # Return the c
+    # @param [Array<String]] words in the text
+    # @param [Integer] i left bound of words to check between
+    # @param [Integer] j right bound of words to check between
+    # @return [Integer] cost of a line containing the words from i to j
     def cost_between(words, i, j)
       @c ||= {}
       @c[[i,j]] ||=
@@ -20,11 +25,22 @@ class WordWrapper
         end
     end
 
-    #         o(1, j)                                   if c(1,j) < Inf
-    # o(j) =
-    #         min[ 1 <= k < j ] ( o(k) + c(k+1, j) )    if c(1,j) == Inf
+    # Use dynamic programming to computer the optimal cost of this text.
+    # Recursively calls itself, keeping track of costs found as well as the
+    # array of splits required to give that cost (so we can actually generate
+    # the optimal text at the end).
     #
-    # Returns [ cost, [chain of splits that gives cost] ]
+    # @param [Array<String>] words to split
+    # @param [Intger] j index to compute cost up through, goes from 1..length of words as we
+    #  recursively compute costs.
+    #
+    # The evaluation looks like this (o is shorthand for optimal_cost):
+    #
+    #             -- o(1, j)                                   if c(1,j) < Inf
+    #     o(j) = -
+    #             -- min[ 1 <= k < j ] ( o(k) + c(k+1, j) )    if c(1,j) == Inf
+    #
+    # @return [Array<Integer, Array<String>>] (cost, [chain of splits that gives cost])
     def optimal_cost(words, j)
       @o ||= {}
       @o[j] ||=
