@@ -4,9 +4,10 @@ include Benchmark
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'word_wrapper'
 
-@oliver_twist = File.read(File.join(File.dirname(__FILE__), "../../oliver-twist.txt"))
-@before_the_law = File.read(File.join(File.dirname(__FILE__), "../../before-the-law.txt"))
-@gettysburg =  File.read(File.join(File.dirname(__FILE__), "../../getty-long.txt"))
+samples_dir = File.join(File.dirname(__FILE__), '..', 'samples')
+@oliver_twist = File.read(File.join(samples_dir, "oliver-twist.txt"))
+@before_the_law = File.read(File.join(samples_dir, "before-the-law.txt"))
+@gettysburg = File.read(File.join(samples_dir, "getty-long.txt"))
 
 def run_greedy(text, times=10000)
   g = WordWrapper::Greedy.new(100, text)
