@@ -12,9 +12,10 @@ Gem::Specification.new do |s|
                            "test/*rb",
                            "samples/*txt",
                            "Rakefile",
-                           "Readme"]
-  s.license     = 'BSD',
-  s.license_file = 'LICENSE'
+                           "README.md",
+                           "LICENSE"]
+  s.licenses     = ['bsd']
   s.homepage    =
     'https://github.com/scpike/word-wrapping/tree/master/ruby'
+  s.add_development_dependency "minitest", [">= 0"]
 end
