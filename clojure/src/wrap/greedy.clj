@@ -1,7 +1,7 @@
 (ns wrap.greedy)
-(use '[clojure.string :only (split)])
+(use '[clojure.string :only (split join)])
 
-(def default-width 80)
+(def default-width 20)
 
 (defn words [text]
   "Splits an input text into an array of words"
@@ -10,8 +10,6 @@
 ; Take from words while length of the current line is <
 ; default-width. Once we get to the end of the line start a new
 ; vector.
-;
-; Results should be a 2d vector
 (defn lines [ary cutoff]
   (let [[acc v]
         (reduce (fn [[acc v s] x]
@@ -22,27 +20,9 @@
                 [[] [] 0] ary)]
     (conj acc v)))
 
-(lines (words "Once upon a time there was a man") 10)
-
-(defn sum-with-count [ary]
-  (reduce (fn [acc i] [(+ (first acc) i)
-                       (+ 1 (last acc))])
-          [0 0] ary))
-
-(sum-with-count (take 10 (iterate inc 1)))
-
-(defn split-after-sum [ary sum]
-  (let [[acc v]
-        (reduce (fn [[acc v s] x]
-                  (let [new-s (+ s x)]
-                    (if (<= new-s sum)
-                      [acc (conj v x) new-s]
-                      [(conj acc v) [x] x])))
-                [[] [] 0] ary)]
-    (conj acc v)))
-
-
-(split-after-sum [1 1 1 1 1 1 1 1 1] 2)
+; Converts an array of arrays of words to an array of strings
+(defn lines-to-text [ary]
+  (map #(join " " %) ary))
 
 (defn wrap [text]
-  (words text))
+  (join "\n" (lines-to-text (lines (words text) default-width))))
