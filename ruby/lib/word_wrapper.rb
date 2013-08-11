@@ -38,7 +38,11 @@ class WordWrapper
   def illegal_words
     @words.select{ |word| word.length > @width }
   end
+
+  def ouput
+    @output.to_s.strip
+  end
 end
 
-require  "minimum_raggedness"
-require  "greedy"
+require_relative  "minimum_raggedness"
+require_relative  "greedy"

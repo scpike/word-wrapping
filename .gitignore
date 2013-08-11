@@ -1,4 +1,7 @@
+doc
 dist
+.yardoc
+ruby/word_wrapper-*
 cabal-dev
 *.o
 *.hi
