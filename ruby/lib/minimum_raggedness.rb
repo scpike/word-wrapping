@@ -2,7 +2,6 @@ class WordWrapper
   class MinimumRaggedness < WordWrapper
     attr_accessor :splits
 
-    # Return the c
     # @param [Array<String]] words in the text
     # @param [Integer] i left bound of words to check between
     # @param [Integer] j right bound of words to check between
@@ -25,14 +24,14 @@ class WordWrapper
         end
     end
 
-    # Use dynamic programming to computer the optimal cost of this text.
-    # Recursively calls itself, keeping track of costs found as well as the
-    # array of splits required to give that cost (so we can actually generate
-    # the optimal text at the end).
+    # Use dynamic programming to compute the optimal cost of this
+    # text.  Recursively calls itself, keeping track of costs found as
+    # well as the array of splits required to give that cost (so we
+    # can actually generate the optimal text at the end).
     #
     # @param [Array<String>] words to split
-    # @param [Intger] j index to compute cost up through, goes from 1..length of words as we
-    #  recursively compute costs.
+    # @param [Intger] j index to compute cost up through, goes from
+    #  1..length of words as we recursively compute costs.
     #
     # The evaluation looks like this (o is shorthand for optimal_cost):
     #
@@ -51,11 +50,11 @@ class WordWrapper
             ks = (1..j-1)
             candidates = {}
             ks.collect do |k|
-            o = optimal_cost words, k
-            c = cost_between words, k + 1, j
-            # store both the chain of the child call and k
-            candidates[c + o[0]] = [o[1], k]
-          end
+              o = optimal_cost words, k
+              c = cost_between words, k + 1, j
+              # store both the chain of the child call and k
+              candidates[c + o[0]] = [o[1], k]
+            end
             if candidates.any?
               cost = candidates.keys.min
               # ks is the chain of splits for this line of recursion

@@ -1,11 +1,11 @@
-(ns wrap.greedy-test
+(ns wrap.minimum_raggedness_test
   (:use clojure.test
-        wrap.greedy
+        wrap.minimum_raggedness
         [clojure.string :only (trim-newline)]
         [clojure.java.io :as io]))
 
 (def input-dir "../test/input/")
-(def greedy-dir "../test/greedy/")
+(def greedy-dir "../test/minimum-raggedness/")
 
 (deftest simple-wrap
   (testing "Simple greedy wrap"
@@ -30,6 +30,6 @@
         output (slurp-test-file greedy-dir filename)]
     (is (= output (wrap 40 input)))))
 
-(deftest file-tests
-  (testing "test " test-file-names
-           (doseq [x test-file-names] (test-file x))))
+;(deftest file-tests
+;  (testing "test " test-file-names
+;           (doseq [x test-file-names] (test-file x))))
