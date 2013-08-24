@@ -1,8 +1,6 @@
 (ns wrap.greedy
   (:use [clojure.string :only (join)]
-        [wrap.util]))
-
-(def default-width 10)
+        [wrap.util :as util]))
 
 (defn split-lines [cutoff xs]
   "Split the words so that the sum of the lengths of each line is <= cutoff"
@@ -16,5 +14,5 @@
     (conj acc v)))
 
 (defn wrap
-  ([text]  (join "\n" (lines-to-text (split-lines default-width (words text)))))
-  ([width text]  (join "\n" (lines-to-text (split-lines width (words text))))))
+  ([text] (util/wrap-with split-lines text))
+  ([width text] (util/wrap-with split-lines width text)))

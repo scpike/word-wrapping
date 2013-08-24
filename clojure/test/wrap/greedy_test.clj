@@ -30,6 +30,6 @@
         output (slurp-test-file greedy-dir filename)]
     (is (= output (wrap 40 input)))))
 
-(deftest file-tests
-  (testing "test " test-file-names
-           (doseq [x test-file-names] (test-file x))))
+;(deftest file-tests
+; (testing "test " test-file-names
+;           (doseq [x test-file-names] (test-file x))))

@@ -1,8 +1,7 @@
 (ns wrap.minimum_raggedness
   (:use [clojure.string :only (join)]
-         wrap.util))
+        [wrap.util :as util]))
 
-(def default-width 40)
 (def infinity Double/POSITIVE_INFINITY)
 
 (defn sum-len-between [xs i j]
@@ -10,33 +9,40 @@
   (let [xs (map count (subvec xs i (+ 1 j)))]
     (reduce + xs)))
 
-(defn cost-between [cutoff i j words]
+(defn calc-cost-between
+  "Calculate the cost of a line starting at words[i] and ending at
+   words[j]. Cost is defined as the square of the whitespace at the
+   end of the line. 0 cost for the last line."
+  [cutoff i j words]
   (let [cost (- cutoff ; line width
-                (- j i) ; spaces
-                (sum-len-between words i j))] ; word width
-    (if (>= cost 0) (* cost cost) infinity)))
-(def memoized-cost-between (memoize cost-between))
+               (- j i) ; spaces
+               (sum-len-between words i j))] ; word width
+    (if (>= cost 0)
+      (if (= (inc j) (count words)) 0 (* cost cost))
+      infinity)))
+(def cost-between (memoize calc-cost-between))
 
-(def memoize-box (atom {}))
+(declare optimal-cost)
+(defn split-cost [cutoff end words split]
+  (let [o (optimal-cost cutoff split words)
+         c (cost-between cutoff (inc split) end words)]
+    [(+ c (first o)) (last o) split]))
 
+(defn best-split [cutoff end words splits]
+  (first (sort (map #(split-cost cutoff end words %) splits))))
+
+(def optimal-cost-box (atom {}))
 (defn optimal-cost [cutoff j words]
-  (let [cost (memoized-cost-between cutoff 0 j words)
-        splits []]
-    (if-let [e (find @memoize-box [cutoff j words])]
-       (val e)
-      (let [ret
-            (if (and (= cost infinity) (> j 0))
-              (let* [candidate-splits (range 0 j)
-                                        ; return a vector of [cost, split chain, split]
-                     winner (first (sort (map (fn [s]
-                                                (let [o (optimal-cost cutoff s words)
-                                                  c (memoized-cost-between cutoff (inc s) j words)]
-                                                  [(+ c (first o)) (last o) s])) candidate-splits)))]
+  (if-let [e (find @optimal-cost-box [cutoff j words])]
+    (val e)
+    (let* [cost (cost-between cutoff 0 j words)
+            ret (if (and (= cost infinity) (> j 0))
+                  (let [candidate-splits (range 0 j)
+                         winner (best-split cutoff j words candidate-splits)]
                     [(first winner) (conj (second winner) (last winner))])
-              [cost splits])]
-        (swap! memoize-box assoc [cutoff j words] ret)
-        ret
-        ))))
+                  [cost []])]
+      (swap! optimal-cost-box assoc [cutoff j words] ret)
+      ret)))
 
 (defn reconstruct [splits xs]
   (map (fn [x] (subvec xs (first x) (last x)))
@@ -50,5 +56,5 @@
         (reconstruct splits xs)))
 
 (defn wrap
-  ([text]  (join "\n" (lines-to-text (split-lines default-width (words text)))))
-  ([width text]  (join "\n" (lines-to-text (split-lines width (words text))))))
+  ([text] (util/wrap-with split-lines text))
+  ([width text] (util/wrap-with split-lines width text)))

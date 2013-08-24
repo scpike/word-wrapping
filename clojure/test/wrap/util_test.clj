@@ -3,6 +3,11 @@
         wrap.util
         [clojure.string :only (trim-newline)]))
 
+(deftest splits-paragraphs
+  (testing "Splits text into paragraphs"
+    (is (= ["Once upon\na time." "In a galaxy far far away"]
+          (paragraphs "Once upon\na time.\n\nIn a galaxy far far away")))))
+
 (deftest splits-words
   (testing "Splits sentence into words."
     (is (= ["Once" "upon" "a" "time"]
