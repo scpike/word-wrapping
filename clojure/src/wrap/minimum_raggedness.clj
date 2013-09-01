@@ -31,18 +31,13 @@
 (defn best-split [cutoff end words splits]
   (first (sort (map #(split-cost cutoff end words %) splits))))
 
-(def optimal-cost-box (atom {}))
-(defn optimal-cost [cutoff j words]
-  (if-let [e (find @optimal-cost-box [cutoff j words])]
-    (val e)
-    (let* [cost (cost-between cutoff 0 j words)
-            ret (if (and (= cost infinity) (> j 0))
-                  (let [candidate-splits (range 0 j)
-                         winner (best-split cutoff j words candidate-splits)]
-                    [(first winner) (conj (second winner) (last winner))])
-                  [cost []])]
-      (swap! optimal-cost-box assoc [cutoff j words] ret)
-      ret)))
+(defn calc-optimal-cost [cutoff j words]
+  (let [cost (cost-between cutoff 0 j words)]
+    (if (and (= cost infinity) (> j 0))
+      (let [r (best-split cutoff j words (range 0 j))]
+           [(first r) (conj (second r) (last r))])
+      [cost []])))
+(def optimal-cost (memoize calc-optimal-cost))
 
 (defn reconstruct [splits xs]
   (map (fn [x] (subvec xs (first x) (last x)))
