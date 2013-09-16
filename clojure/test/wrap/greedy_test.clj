@@ -9,10 +9,10 @@
 
 (deftest simple-wrap
   (testing "Simple greedy wrap"
-    (is (= "apple\nsauce" (wrap 10 "apple sauce")))
-    (is (= "apple\nsauce" (wrap 9 "apple sauce")))
-    (is (= "apple sauce" (wrap 11 "apple sauce")))
-    (is (= "apple sauce" (wrap 12 "apple sauce")))))
+    (is (= "apple\nsauce" (wrap-text 10 "apple sauce")))
+    (is (= "apple\nsauce" (wrap-text 9 "apple sauce")))
+    (is (= "apple sauce" (wrap-text 11 "apple sauce")))
+    (is (= "apple sauce" (wrap-text 12 "apple sauce")))))
 
 (defn slurp-test-file
   "Reads in a file for testing"
@@ -28,7 +28,7 @@
   [filename]
   (let [input (slurp-test-file input-dir filename)
         output (slurp-test-file greedy-dir filename)]
-    (is (= output (wrap 40 input)))))
+    (is (= output (wrap-text 40 input)))))
 
 ;(deftest file-tests
 ; (testing "test " test-file-names

@@ -1,8 +1,8 @@
 (ns wrap.minimum_raggedness
-  (:use [clojure.string :only (join)]
-        [wrap.util :as util]))
+  (:use [clojure.string :only (join)])
+  (:require [wrap.util :as util]))
 
-(def infinity Double/POSITIVE_INFINITY)
+(def infinity 100000)
 
 (defn sum-len-between [xs i j]
   "Sum the lengths of the words in xs between index i and j"
@@ -50,6 +50,6 @@
          cost (first ans)]
         (reconstruct splits xs)))
 
-(defn wrap
+(defn wrap-text
   ([text] (util/wrap-with split-lines text))
   ([width text] (util/wrap-with split-lines width text)))

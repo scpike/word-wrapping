@@ -2,6 +2,7 @@ doc
 dist
 .yardoc
 ruby/word_wrapper-*
+web/crossover-cljs
 cabal-dev
 *.o
 *.hi
